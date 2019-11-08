@@ -11,6 +11,10 @@ import subprocess
 import shutil
 import datetime
 
+"""
+0 */3 * * * bash -c 'HOME=/home/ubuntu/; eval "$(ssh-agent -s)" && ssh-add /home/ubuntu/.ssh/somekey; source /home/ubuntu/code/fantasybball-scripts/.venv/bin/activate && pushd /home/ubuntu/code/fantasybball-scripts && python3 dump.py > dump.log 2>&1; deactivate; popd'
+"""
+
 with open('api-info.private', 'r') as f:
     api_info = json.load(f)
     league_id = api_info['league_id']
@@ -173,8 +177,9 @@ with open(dump_file, 'w') as f:
     writer.writeheader()
     writer.writerows(stats.values())
 
+subprocess.run('git reset --hard origin/master', cwd=gist_location, check=True, shell=True)
 shutil.copy(dump_file, gist_location)
 comment = f'updated {datetime.datetime.utcnow().isoformat()}'
-proc = subprocess.run(f'git add {dump_file} && git commit -m "{comment}" && git push', cwd=gist_location, check=True, shell=True)
+proc = subprocess.run(f'git add {dump_file} && git commit -m "{comment}" && git push -v', cwd=gist_location, check=True, shell=True)
 
 print('done')
