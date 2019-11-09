@@ -10,10 +10,17 @@ from functools import wraps
 import subprocess
 import shutil
 import datetime
+import getopt
+import sys
+import unidecode
 
 """
 0 */3 * * * bash -c 'HOME=/home/ubuntu/; eval "$(ssh-agent -s)" && ssh-add /home/ubuntu/.ssh/somekey; source /home/ubuntu/code/fantasybball-scripts/.venv/bin/activate && pushd /home/ubuntu/code/fantasybball-scripts && python3 dump.py > dump.log 2>&1; deactivate; popd'
 """
+
+opts, _ = getopt.getopt(sys.argv[1:], 'u')
+upload = '-u' in [x for x, _ in opts]
+print(f'upload:{upload}')
 
 with open('api-info.private', 'r') as f:
     api_info = json.load(f)
@@ -107,12 +114,20 @@ for team_id, team_name in caller.teams(league_id):
     for player_id, player_name in caller.roster(team_id):
         player_owners[player_name] = team_name
 
+# print(player_owners.keys())
+
+stats={}
 bbref_totals = client.players_season_totals(season_end_year=2020)
-stats = {x['name']:x for x in bbref_totals}
+for x in bbref_totals:
+    x['name'] = unidecode.unidecode(x['name'])
+    stats[x['name']] = x
 bbref_adv = client.players_advanced_season_totals(season_end_year=2020)
 for x in bbref_adv:
-    stats[x['name']].update(x)
+    x['name'] = unidecode.unidecode(x['name'])
+    stats[unidecode.unidecode(x['name'])].update(x)
 print(f'bbref_totals:{len(stats)}')
+
+print(stats.keys())
 
 for player_name, owner in player_owners.items():
     print(f'assigning {player_name}')
@@ -132,6 +147,7 @@ fieldnames = [
     'name',
     'age',
     'owner',
+    'team',
     'player_efficiency_rating',
     'usage_percentage',
     'total_rebound_percentage',
@@ -141,16 +157,18 @@ fieldnames = [
     'block_percentage',
     'minutes_played',
     'games_played',
-    'win_shares',
+    'true_shooting_percentage',
     'assists',
+    'steals',
+    'blocks',
     'made_field_goals',
     'attempted_field_goals',
     'made_three_point_field_goals',
     'attempted_three_point_field_goals',
     'made_free_throws',
     'attempted_free_throws',
-    'blocks',
-    'steals',
+    'turnover_percentage',
+    'win_shares',
     'box_plus_minus',
     'defensive_box_plus_minus',
     'defensive_rebound_percentage',
@@ -165,9 +183,6 @@ fieldnames = [
     'personal_fouls',
     'positions',
     # 'slug',
-    'team',
-    'true_shooting_percentage',
-    'turnover_percentage',
     'turnovers',
     'value_over_replacement_player',
     'win_shares_per_48_minutes',
@@ -177,9 +192,10 @@ with open(dump_file, 'w') as f:
     writer.writeheader()
     writer.writerows(stats.values())
 
-subprocess.run('git reset --hard origin/master', cwd=gist_location, check=True, shell=True)
-shutil.copy(dump_file, gist_location)
-comment = f'updated {datetime.datetime.utcnow().isoformat()}'
-proc = subprocess.run(f'git add {dump_file} && git commit -m "{comment}" && git push -v', cwd=gist_location, check=True, shell=True)
+if upload:
+    subprocess.run('git reset --hard origin/master', cwd=gist_location, check=True, shell=True)
+    shutil.copy(dump_file, gist_location)
+    comment = f'updated {datetime.datetime.utcnow().isoformat()}'
+    proc = subprocess.run(f'git add {dump_file} && git commit -m "{comment}" && git push -v', cwd=gist_location, check=True, shell=True)
 
 print('done')
