@@ -104,15 +104,17 @@ class YahooApiCaller():
             raise Exception(resp.text)
         data = xmltodict.parse(resp.text)
         for player in data['fantasy_content']['team']['roster']['players']['player']:
-            yield player['player_key'], player['name']['full']
+            yield player['player_key'], player['name']['full'], player
 
 caller = YahooApiCaller()
 print([x for x in caller.teams(league_id)])
 
 player_owners = {}
+player_statuses = {}
 for team_id, team_name in caller.teams(league_id):
-    for player_id, player_name in caller.roster(team_id):
+    for player_id, player_name, player_data in caller.roster(team_id):
         player_owners[player_name] = team_name
+        player_statuses[player_name] = player_data['status'] if 'status' in player_data else ''
 
 # print(player_owners.keys())
 
@@ -124,10 +126,19 @@ for x in bbref_totals:
 bbref_adv = client.players_advanced_season_totals(season_end_year=2020)
 for x in bbref_adv:
     x['name'] = unidecode.unidecode(x['name'])
-    stats[unidecode.unidecode(x['name'])].update(x)
+    stats[x['name']].update(x)
+bbref_adv_2019 = client.players_advanced_season_totals(season_end_year=2019)
+for x in bbref_adv_2019:
+    x['name'] = unidecode.unidecode(x['name'])
+    if x['name'] in stats:
+        for key, val in x.items():
+            stats[x['name']][f'{key}_2019'] = val
 print(f'bbref_totals:{len(stats)}')
 
 print(stats.keys())
+
+for x in stats.values():
+    x['status'] = ''
 
 for player_name, owner in player_owners.items():
     print(f'assigning {player_name}')
@@ -137,6 +148,7 @@ for player_name, owner in player_owners.items():
         match, _ = process.extractOne(player_name, stats.keys())
         info = stats[match]
     info['owner'] = owner
+    info['status'] = player_statuses[player_name]
     
 # print(next( y for y in stats.values()))
 
@@ -168,29 +180,52 @@ fieldnames = [
     'made_free_throws',
     'attempted_free_throws',
     'turnover_percentage',
-    'win_shares',
+    # 'win_shares',
     'box_plus_minus',
-    'defensive_box_plus_minus',
-    'defensive_rebound_percentage',
-    'defensive_rebounds',
-    'defensive_win_shares',
+    # 'defensive_box_plus_minus',
+    # 'defensive_rebound_percentage',
+    # 'defensive_rebounds',
+    # 'defensive_win_shares',
     'free_throw_attempt_rate',
-    'games_started',
-    'offensive_box_plus_minus',
-    'offensive_rebound_percentage',
-    'offensive_rebounds',
-    'offensive_win_shares',
-    'personal_fouls',
+    # 'games_started',
+    # 'offensive_box_plus_minus',
+    # 'offensive_rebound_percentage',
+    # 'offensive_rebounds',
+    # 'offensive_win_shares',
+    # 'personal_fouls',
     'positions',
     # 'slug',
     'turnovers',
-    'value_over_replacement_player',
-    'win_shares_per_48_minutes',
+    # 'value_over_replacement_player',
+    # 'win_shares_per_48_minutes',
+    'status',
+    'player_efficiency_rating_2019',
+    'usage_percentage_2019',
+    'total_rebound_percentage_2019',
+    'three_point_attempt_rate_2019',
+    'assist_percentage_2019',
+    'steal_percentage_2019',
+    'block_percentage_2019',
+    'player_efficiency_rating_diff',
+    'usage_percentage_diff',
+    'total_rebound_percentage_diff',
+    'three_point_attempt_rate_diff',
+    'assist_percentage_diff',
+    'steal_percentage_diff',
+    'block_percentage_diff'
 ]
+
+for x in stats.keys():
+    player_stats = stats[x]
+    for field in fieldnames:
+        if f'{field}_2019' in fieldnames and f'{field}_2019' in player_stats:
+            player_stats[f'{field}_diff'] = float(player_stats[field]) - float(player_stats[f'{field}_2019'])
+            
+
 with open(dump_file, 'w') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction='ignore')
     writer.writeheader()
-    writer.writerows(stats.values())
+    writer.writerows(sorted(stats.values(), key=lambda x: x['name']))
 
 if upload:
     subprocess.run('git reset --hard origin/master', cwd=gist_location, check=True, shell=True)
