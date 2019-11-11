@@ -15,7 +15,7 @@ import sys
 import unidecode
 
 """
-0 */3 * * * bash -c 'HOME=/home/ubuntu/; eval "$(ssh-agent -s)" && ssh-add /home/ubuntu/.ssh/somekey; source /home/ubuntu/code/fantasybball-scripts/.venv/bin/activate && pushd /home/ubuntu/code/fantasybball-scripts && python3 dump.py > dump.log 2>&1; deactivate; popd'
+0 */3 * * * bash -c 'HOME=/home/ubuntu/; eval "$(ssh-agent -s)" && ssh-add /home/ubuntu/.ssh/somesshkey; source /home/ubuntu/code/fantasybball-scripts/.venv/bin/activate && pushd /home/ubuntu/code/fantasybball-scripts; git pull; python3 dump.py -u > dump.log 2>&1; deactivate; popd'
 """
 
 opts, _ = getopt.getopt(sys.argv[1:], 'u')
