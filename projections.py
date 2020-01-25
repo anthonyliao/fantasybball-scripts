@@ -117,11 +117,11 @@ try:
                 print(f'last page:{offset}')
                 break
             else:
-                # Random 3-5 seconds between pages to Yahoo denying us access
-                time.sleep(3.0 + (random.random() * 2.0))
+                # Random 5-7 seconds between pages to Yahoo denying us access
+                time.sleep(5.0 + (random.random() * 2.0))
 
-        # 50-60 seconds between dates to Yahoo denying us access
-        time.sleep(50.0 + (random.random() * 10.0))
+        # 100-120 seconds between dates to Yahoo denying us access
+        time.sleep(100.0 + (random.random() * 20.0))
 finally:
     sqlite_con.close()
 
