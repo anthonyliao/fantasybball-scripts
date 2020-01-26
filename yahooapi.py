@@ -102,9 +102,8 @@ if __name__ == '__main__':
                         [datetime.date.today(), week_end])
             d = cur.fetchone()
             # logging.info(type(d))
-            keys = ','.join(d.keys())
-            values = ','.join([str(x) for x in d])
-            logging.info(f'\n{keys}\n{values}')
+            for key in d.keys():
+                logging.info(f'{key}: {d[key]}')
         opponent_roster = roster(opponent_id, access_token)
         logging.info(f'opponent roster:{opponent_roster}')
         opponent_roster_ids = ','.join([f'"{x[0]}"' for x in opponent_roster])
@@ -114,7 +113,6 @@ if __name__ == '__main__':
                         [datetime.date.today(), week_end])
             d = cur.fetchone()
             # logging.info(type(d))
-            keys = ','.join(d.keys())
-            values = ','.join([str(x) for x in d])
-            logging.info(f'\n{keys}\n{values}')
+            for key in d.keys():
+                logging.info(f'{key}: {d[key]}')
     logging.info('end')
