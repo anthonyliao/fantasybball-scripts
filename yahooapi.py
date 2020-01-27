@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # logging.info(json.dumps(active_matches))
     for match in active_matches:
         week = match['week']
-        if week != "14" and week != "15":
+        if week != "15":
             continue
 
         week_start = match['week_start']
