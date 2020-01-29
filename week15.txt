@@ -1,151 +1,31 @@
-select a.player, a.yahoo_id, sum(case when fga = 0 then 0 else 1 end) as games, sum(fgm), sum(fga), sum(ftm), sum(fta), sum(ptm) as ptm, sum(pts) as pts, sum(reb), sum(ast), sum(stl), sum(blk) as blk, sum(tov) from projections a left join rosters b on a.yahoo_id = b.yahoo_id where b.yahoo_id is null and a.playdate between '2020-01-27' and '2020-02-02' group by a.player, a.yahoo_id order by ptm desc, pts desc, blk desc limit 10;
-
-ptm, pts, blk
-B. McLemore|5158|4|9.2|37.4|0.9
-D. Garland|6167|4|7.8|59.9|0.5
-T. Snell|5190|4|7.2|36.2|1.5
-L. Kornet|5903|4|7.0|35.0|4.5
-K. Huerter|6030|3|6.9|35.8|1.1
-J. Clarkson|5357|4|6.7|54.9|0.6
-L. Shamet|6037|3|6.6|28.9|0.4
-D. Green|4651|3|6.3|26.5|1.7
-P. Mills|4660|3|6.2|31.0|0.3
-G. Niang|5681|4|6.1|28.4|0.6
-
-ptm, blk, pts
-B. McLemore|5158|4|9.2|37.4|0.9
-D. Garland|6167|4|7.8|59.9|0.5
-T. Snell|5190|4|7.2|36.2|1.5
-L. Kornet|5903|4|7.0|35.0|4.5
-K. Huerter|6030|3|6.9|35.8|1.1
-J. Clarkson|5357|4|6.7|54.9|0.6
-L. Shamet|6037|3|6.6|28.9|0.4
-D. Green|4651|3|6.3|26.5|1.7
-P. Mills|4660|3|6.2|31.0|0.3
-G. Niang|5681|4|6.1|28.4|0.6
-
-pts, ptm, blk
-D. Garland|6167|4|7.8|59.9|0.5
-J. Clarkson|5357|4|6.7|54.9|0.6
-C. White|6169|4|4.8|39.5|0.8
-K. Bazemore|5102|4|5.1|38.4|2.1
-I. Thomas|4942|3|5.4|37.5|0.3
-B. McLemore|5158|4|9.2|37.4|0.9
-D. Lee|5733|3|4.7|37.2|0.3
-T. Snell|5190|4|7.2|36.2|1.5
-K. Huerter|6030|3|6.9|35.8|1.1
-K. Caldwell-Pope|5159|3|5.9|35.3|0.6
-
-pts, blk, ptm
-D. Garland|6167|4|7.8|59.9|0.5
-J. Clarkson|5357|4|6.7|54.9|0.6
-C. White|6169|4|4.8|39.5|0.8
-K. Bazemore|5102|4|5.1|38.4|2.1
-I. Thomas|4942|3|5.4|37.5|0.3
-B. McLemore|5158|4|9.2|37.4|0.9
-D. Lee|5733|3|4.7|37.2|0.3
-T. Snell|5190|4|7.2|36.2|1.5
-K. Huerter|6030|3|6.9|35.8|1.1
-K. Caldwell-Pope|5159|3|5.9|35.3|0.6
-
-blk, pts, ptm
-L. Kornet|5903|4|7.0|35.0|4.5
-J. Hayes|6170|3|0.3|25.1|4.3
-J. Poeltl|5640|3|0.0|13.0|3.3
-B. Biyombo|4888|3|0.0|20.1|3.0
-J. Henson|5020|4|1.4|15.8|2.9
-I. Mahinmi|3954|3|0.5|18.1|2.9
-A. Len|5156|3|2.1|26.7|2.2
-B. Brown|6053|4|1.6|22.6|2.2
-K. Bazemore|5102|4|5.1|38.4|2.1
-D. Dedmon|5256|4|2.0|19.9|2.1
-
-blk, ptm, pts
-L. Kornet|5903|4|7.0|35.0|4.5
-J. Hayes|6170|3|0.3|25.1|4.3
-J. Poeltl|5640|3|0.0|13.0|3.3
-B. Biyombo|4888|3|0.0|20.1|3.0
-J. Henson|5020|4|1.4|15.8|2.9
-I. Mahinmi|3954|3|0.5|18.1|2.9
-A. Len|5156|3|2.1|26.7|2.2
-B. Brown|6053|4|1.6|22.6|2.2
-K. Bazemore|5102|4|5.1|38.4|2.1
-T. Craig|5893|4|2.8|19.7|2.1
-
-select sum(case when fga = 0 then 0 else 1 end) as games, sum(fgm), sum(fga), sum(ftm), sum(fta), sum(ptm), sum(pts), sum(reb), sum(ast), sum(stl), sum(blk), sum(tov) from projections where playdate between '2020-01-27' and '2020-02-02' and yahoo_id in ("6016","5292","5826","4163","4130","6209","583","4325","5018","4886","5693","4391","4893","4612","5470")
-2020-01-27 01:33:30,611  INFO: games: 38
-2020-01-27 01:33:30,612  INFO: sum(fgm): 227
-2020-01-27 01:33:30,612  INFO: sum(fga): 468.8
-2020-01-27 01:33:30,612  INFO: sum(ftm): 111.7
-2020-01-27 01:33:30,612  INFO: sum(fta): 140.1
-2020-01-27 01:33:30,612  INFO: sum(ptm): 57.2
-2020-01-27 01:33:30,612  INFO: sum(pts): 622.8
-2020-01-27 01:33:30,612  INFO: sum(reb): 256.5
-2020-01-27 01:33:30,612  INFO: sum(ast): 119.3
-2020-01-27 01:33:30,613  INFO: sum(stl): 30.6
-2020-01-27 01:33:30,613  INFO: sum(blk): 28.9
-2020-01-27 01:33:30,613  INFO: sum(tov): 72.3
-
-select player, yahoo_id, sum(case when fga = 0 then 0 else 1 end) as games from projections where playdate between '2020-01-27' and '2020-02-02' and yahoo_id in ("6016","5292","5826","4163","4130","6209","5835","4325","5018","4886","5693","4391","4893","4612","5470") group by player, yahoo_id
-A. Burks|4893|3
-A. Wiggins|5292|2
-B. Clarke|6209|3
-D. Finney-Smith|5693|4
-D. Mitchell|5826|4
-J. Allen|5835|3
-J. Lamb|5018|2
-J. Valanciunas|4886|3
-J. Winslow|5470|0
-K. Love|4391|4
-L. Aldridge|4130|3
-M. Gasol|4325|4
-P. Tucker|4163|4
-S. Curry|4612|0
-T. Young|6016|3
-
-select sum(case when fga = 0 then 0 else 1 end) as games, sum(fgm), sum(fga), sum(ftm), sum(fta), sum(ptm), sum(pts), sum(reb), sum(ast), sum(stl), sum(blk), sum(tov) from projections where playdate between '2020-01-27' and '2020-02-02' and yahoo_id in ("6164","5842","4563","4290","4897","4926","5832","5827","5727","5880","6022","5073","6174","5157","5327")
-2020-01-27 01:33:30,800  INFO: games: 40
-2020-01-27 01:33:30,800  INFO: sum(fgm): 234.49999999999997
-2020-01-27 01:33:30,801  INFO: sum(fga): 499.59999999999997
-2020-01-27 01:33:30,801  INFO: sum(ftm): 120.3
-2020-01-27 01:33:30,801  INFO: sum(fta): 149.00000000000003
-2020-01-27 01:33:30,801  INFO: sum(ptm): 66.7
-2020-01-27 01:33:30,801  INFO: sum(pts): 656.2
-2020-01-27 01:33:30,801  INFO: sum(reb): 250.8000000000001
-2020-01-27 01:33:30,801  INFO: sum(ast): 158.30000000000007
-2020-01-27 01:33:30,802  INFO: sum(stl): 45.20000000000001
-2020-01-27 01:33:30,802  INFO: sum(blk): 27.200000000000006
-2020-01-27 01:33:30,802  INFO: sum(tov): 81.1
-
-ptm_delta = -9.5
-ptms_delta = -33.4
-reb_delta = -0.3
-ast_delta = -39
-stl_delta = -14.6
-blk_delta = 1.7
-tov_delta = 8.8
-
-P. Tucker|4163|4|6.4 ptm|27.6 pts|1.7 blk|25.1 rebs
-D. Garland|6167|4|7.8 ptm|59.9 pts|0.5 blk|11.1 reb
-J. Clarkson|5357|4|6.7 ptm|54.9 pts|0.6 blk|11.0 reb
-B. McLemore|5158|4|9.2 ptm|37.4 pts|0.9 blk|8.5 reb
-L. Kornet|5903|4|7.0 ptm|35.0 pts|4.5 blk|14.2 reb
-K. Huerter|6030|3|6.9 ptm|35.8 pts|1.1 blk|12.3 reb
-
-
-select player, yahoo_id, sum(case when fga = 0 then 0 else 1 end) as games from projections where playdate between '2020-01-27' and '2020-02-02' and and yahoo_id in ("6164","5842","4563","4290","4897","4926","5832","5827","5727","5880","6022","5073","6174","5157","5327") group by player, yahoo_id;
-B. Adebayo|5827|3
-D. Bertans|4926|3
-D. Theis|5880|3
-D. White|5842|3
-F. VanVleet|5727|4
-J. Collins|5832|3
-J. Harden|4563|3
-J. Morant|6164|3
-J. Nurkic|5327|0
-K. Middleton|5073|3
-N. Noel|5157|0
-N. Vucevic|4897|2
-P. Washington|6174|3
-S. Gilgeous-Alexander|6022|3
-T. Young|4290|4
+2020-01-29 08:06:12,621  INFO: my roster:[('5826', 'Donovan Mitchell'), ('4893', 'Alec Burks'), ('6016', 'Trae Young'), ('5693', 'Dorian Finney-Smith'), ('5835', 'Jarrett Allen'), ('6209', 'Brandon Clarke'), ('4391', 'Kevin Love'), ('4130', 'LaMarcus Aldridge'), ('5018', 'Jeremy Lamb'), ('4886', 'Jonas Valanciunas'), ('4325', 'Marc Gasol'), ('3962', 'Ersan Ilyasova'), ('5292', 'Andrew Wiggins'), ('4612', 'Stephen Curry'), ('5470', 'Justise Winslow')]
+2020-01-29 08:06:12,622 DEBUG: select sum(case when fga = 0 then 0 else 1 end) as games, sum(fgm), sum(fga), sum(ftm), sum(fta), sum(ptm), sum(pts), sum(reb), sum(ast), sum(stl), sum(blk), sum(tov) from projections where playdate between '2020-01-29' and '2020-02-02' and yahoo_id in ("5826","4893","6016","5693","5835","6209","4391","4130","5018","4886","4325","3962","5292","4612","5470")
+2020-01-29 08:06:12,624  INFO: games: 27
+2020-01-29 08:06:12,625  INFO: sum(fgm): 153.6
+2020-01-29 08:06:12,625  INFO: sum(fga): 314.8
+2020-01-29 08:06:12,626  INFO: sum(ftm): 75.10000000000001
+2020-01-29 08:06:12,627  INFO: sum(fta): 95.00000000000001
+2020-01-29 08:06:12,627  INFO: sum(ptm): 38.2
+2020-01-29 08:06:12,628  INFO: sum(pts): 420.70000000000005
+2020-01-29 08:06:12,628  INFO: sum(reb): 179.70000000000005
+2020-01-29 08:06:12,628  INFO: sum(ast): 81.70000000000002
+2020-01-29 08:06:12,629  INFO: sum(stl): 21.900000000000002
+2020-01-29 08:06:12,629  INFO: sum(blk): 20.400000000000002
+2020-01-29 08:06:12,630  INFO: sum(tov): 48.500000000000014
+2020-01-29 08:06:12,635 DEBUG: Starting new HTTPS connection (1): fantasysports.yahooapis.com:443
+2020-01-29 08:06:12,818 DEBUG: https://fantasysports.yahooapis.com:443 "GET /fantasy/v2/team/395.l.71747.t.3/roster HTTP/1.1" 200 3085
+2020-01-29 08:06:12,840  INFO: opponent roster:[('6164', 'Ja Morant'), ('6022', 'Shai Gilgeous-Alexander'), ('4563', 'James Harden'), ('4290', 'Thaddeus Young'), ('4897', 'Nikola Vucevic'), ('4926', 'Davis Bertans'), ('5827', 'Bam Adebayo'), ('5157', 'Nerlens Noel'), ('5727', 'Fred VanVleet'), ('5880', 'Daniel Theis'), ('5073', 'Khris Middleton'), ('6174', 'PJ Washington'), ('5832', 'John Collins'), ('5327', 'Jusuf Nurkic')]
+2020-01-29 08:06:12,842 DEBUG: select sum(case when fga = 0 then 0 else 1 end) as games, sum(fgm), sum(fga), sum(ftm), sum(fta), sum(ptm), sum(pts), sum(reb), sum(ast), sum(stl), sum(blk), sum(tov) from projections where playdate between '2020-01-29' and '2020-02-02' and yahoo_id in ("6164","6022","4563","4290","4897","4926","5827","5157","5727","5880","5073","6174","5832","5327")
+2020-01-29 08:06:12,844  INFO: games: 27
+2020-01-29 08:06:12,849  INFO: sum(fgm): 159.3
+2020-01-29 08:06:12,849  INFO: sum(fga): 341.50000000000006
+2020-01-29 08:06:12,857  INFO: sum(ftm): 87.60000000000001
+2020-01-29 08:06:12,858  INFO: sum(fta): 107.3
+2020-01-29 08:06:12,859  INFO: sum(ptm): 47.599999999999994
+2020-01-29 08:06:12,860  INFO: sum(pts): 454.40000000000003
+2020-01-29 08:06:12,862  INFO: sum(reb): 165.10000000000002
+2020-01-29 08:06:12,862  INFO: sum(ast): 104.70000000000002
+2020-01-29 08:06:12,863  INFO: sum(stl): 31.700000000000003
+2020-01-29 08:06:12,863  INFO: sum(blk): 19.8
+2020-01-29 08:06:12,864  INFO: sum(tov): 55.199999999999996
+2020-01-29 08:06:12,864  INFO: end
